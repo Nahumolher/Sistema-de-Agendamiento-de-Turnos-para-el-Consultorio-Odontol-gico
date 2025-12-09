@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico de Scripts</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .result { 
+            margin: 15px 0; 
+            padding: 15px; 
+            border-radius: 8px; 
+            border-left: 5px solid;
+        }
+        .success { 
+            background-color: #d4edda; 
+            color: #155724; 
+            border-left-color: #28a745;
+        }
+        .error { 
+            background-color: #f8d7da; 
+            color: #721c24; 
+            border-left-color: #dc3545;
+        }
+        .warning { 
+            background-color: #fff3cd; 
+            color: #856404; 
+            border-left-color: #ffc107;
+        }
+        .info { 
+            background-color: #d1ecf1; 
+            color: #0c5460; 
+            border-left-color: #17a2b8;
+        }
+        .loading { 
+            background-color: #e2e3e5; 
+            color: #383d41; 
+            border-left-color: #6c757d;
+        }
+        h1 {
+            color: #343a40;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .script-info {
+            font-family: monospace;
+            font-size: 12px;
+            background: #f8f9fa;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Diagnóstico Completo de Scripts</h1>
+        
+        <button class="btn" id="runTestsBtn">🚀 Ejecutar Todas las Pruebas</button>
+        <button class="btn" id="clearResultsBtn">🧹 Limpiar Resultados</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const scriptsToTest = [
+            // Scripts locales
+            { url: '/js/api.js', type: 'local', name: 'API Service' },
+            { url: '/js/admin.js', type: 'local', name: 'Admin Manager' },
+            { url: '/js/app.js', type: 'local', name: 'Main App' },
+            { url: '/js/auth.js', type: 'local', name: 'Authentication' },
+            { url: '/js/appointments.js', type: 'local', name: 'Appointments' },
+            { url: '/js/calendar.js', type: 'local', name: 'Calendar' },
+            
+            // CDNs externos
+            { url: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', type: 'cdn', name: 'Bootstrap JS' },
+            { url: 'https://cdn.jsdelivr.net/npm/chart.js', type: 'cdn', name: 'Chart.js' },
+            { url: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css', type: 'cdn', name: 'Font Awesome CSS' },
+            
+            // Archivos CSS locales
+            { url: '/css/styles.css', type: 'local', name: 'Main Styles' },
+            { url: '/css/calendar.css', type: 'local', name: 'Calendar Styles' },
+        ];
+
+        async function testScript(scriptInfo) {
+            const startTime = Date.now();
+            
+            try {
+                const response = await fetch(scriptInfo.url, {
+                    method: 'HEAD',
+                    cache: 'no-cache'
+                });
+                
+                const loadTime = Date.now() - startTime;
+                
+                if (response.ok) {
+                    return {
+                        success: true,
+                        status: response.status,
+                        loadTime: loadTime,
+                        size: response.headers.get('content-length') || 'Unknown',
+                        type: response.headers.get('content-type') || 'Unknown'
+                    };
+                } else {
+                    return {
+                        success: false,
+                        status: response.status,
+                        statusText: response.statusText,
+                        loadTime: loadTime
+                    };
+                }
+            } catch (error) {
+                return {
+                    success: false,
+                    error: error.message,
+                    loadTime: Date.now() - startTime
+                };
+            }
+        }
+
+        async function testScriptLoad(scriptInfo) {
+            return new Promise((resolve) => {
+                const script = document.createElement('script');
+                const startTime = Date.now();
+                
+                script.onload = () => {
+                    resolve({
+                        success: true,
+                        loadTime: Date.now() - startTime,
+                        loaded: true
+                    });
+                };
+                
+                script.onerror = (error) => {
+                    resolve({
+                        success: false,
+                        loadTime: Date.now() - startTime,
+                        error: 'Script failed to load',
+                        loaded: false
+                    });
+                };
+                
+                // Timeout después de 10 segundos
+                setTimeout(() => {
+                    resolve({
+                        success: false,
+                        loadTime: Date.now() - startTime,
+                        error: 'Timeout loading script',
+                        loaded: false
+                    });
+                }, 10000);
+                
+                script.src = scriptInfo.url;
+                document.head.appendChild(script);
+            });
+        }
+
+        function displayResult(scriptInfo, testResult, loadResult = null) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            
+            let className = 'result ';
+            let icon = '';
+            let message = '';
+            
+            if (testResult.success && (!loadResult || loadResult.success)) {
+                className += 'success';
+                icon = '✅';
+                message = `${scriptInfo.name} - OK`;
+            } else if (testResult.status === 404) {
+                className += 'error';
+                icon = '❌';
+                message = `${scriptInfo.name} - ERROR 404 (No encontrado)`;
+            } else if (testResult.status >= 500) {
+                className += 'error';
+                icon = '💥';
+                message = `${scriptInfo.name} - ERROR ${testResult.status} (Error del servidor)`;
+            } else if (!testResult.success) {
+                className += 'error';
+                icon = '⚠️';
+                message = `${scriptInfo.name} - ERROR: ${testResult.error || testResult.statusText}`;
+            } else if (loadResult && !loadResult.success) {
+                className += 'warning';
+                icon = '⚠️';
+                message = `${scriptInfo.name} - Se puede descargar pero falla al cargar: ${loadResult.error}`;
+            }
+            
+            resultDiv.className = className;
+            resultDiv.innerHTML = `
+                <strong>${icon} ${message}</strong>
+                <div class="script-info">
+                    <strong>URL:</strong> ${scriptInfo.url}<br>
+                    <strong>Tipo:</strong> ${scriptInfo.type}<br>
+                    <strong>Status:</strong> ${testResult.status || 'N/A'}<br>
+                    <strong>Tiempo de carga:</strong> ${testResult.loadTime}ms<br>
+                    ${testResult.size ? `<strong>Tamaño:</strong> ${testResult.size} bytes<br>` : ''}
+                    ${testResult.type ? `<strong>Content-Type:</strong> ${testResult.type}<br>` : ''}
+                    ${loadResult ? `<strong>Carga ejecutable:</strong> ${loadResult.success ? 'Sí' : 'No'}<br>` : ''}
+                </div>
+            `;
+            
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        async function runAllTests() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="result loading">🔄 Ejecutando pruebas completas...</div>';
+
+            for (let scriptInfo of scriptsToTest) {
+                // Mostrar que estamos probando este script
+                const loadingDiv = document.createElement('div');
+                loadingDiv.className = 'result loading';
+                loadingDiv.innerHTML = `🔄 Probando: ${scriptInfo.name}...`;
+                resultsDiv.appendChild(loadingDiv);
+
+                // Test de accesibilidad
+                const testResult = await testScript(scriptInfo);
+                
+                // Test de carga (solo para JS)
+                let loadResult = null;
+                if (scriptInfo.url.endsWith('.js') && testResult.success) {
+                    loadResult = await testScriptLoad(scriptInfo);
+                }
+
+                // Remover el loading div
+                loadingDiv.remove();
+                
+                // Mostrar resultado
+                displayResult(scriptInfo, testResult, loadResult);
+            }
+
+            // Remover mensaje inicial de carga
+            const initialLoading = resultsDiv.querySelector('.loading');
+            if (initialLoading) {
+                initialLoading.remove();
+            }
+
+            // Agregar resumen
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'result info';
+            summaryDiv.innerHTML = `
+                <strong>📊 Pruebas completadas</strong><br>
+                Total de recursos probados: ${scriptsToTest.length}<br>
+                Hora de finalización: ${new Date().toLocaleString()}
+            `;
+            resultsDiv.appendChild(summaryDiv);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        // Capturar errores de scripts globalmente
+        window.addEventListener('error', function(e) {
+            console.error('Error de script detectado:', e);
+            const resultsDiv = document.getElementById('results');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'result error';
+            errorDiv.innerHTML = `
+                <strong>❌ Error de script detectado en tiempo real</strong><br>
+                <div class="script-info">
+                    <strong>Archivo:</strong> ${e.filename}<br>
+                    <strong>Línea:</strong> ${e.lineno}<br>
+                    <strong>Error:</strong> ${e.message}
+                </div>
+            `;
+            resultsDiv.appendChild(errorDiv);
+        });
+
+        // Auto-ejecutar al cargar
+        window.onload = () => {
+            // Agregar event listeners para los botones
+            document.getElementById('runTestsBtn').addEventListener('click', runAllTests);
+            document.getElementById('clearResultsBtn').addEventListener('click', clearResults);
+            
+            setTimeout(runAllTests, 1000);
+        };
+    </script>
+</body>
+</html>

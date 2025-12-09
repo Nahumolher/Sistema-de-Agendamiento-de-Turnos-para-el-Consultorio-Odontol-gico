@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultorio Roxana López - Sistema de Turnos</title>
+    
+    <!-- Favicon con logo original -->
+    <link rel="icon" type="image/png" href="images/logo-blanco.png">
+    <link rel="shortcut icon" type="image/png" href="images/logo-blanco.png">
+    <link rel="apple-touch-icon" href="images/logo-blanco.png">
+    
+    <!-- Meta tags para SEO y compartir en redes sociales -->
+    <meta name="description" content="Sistema moderno de turnos online para Consultorio Roxana López. Reservá tu turno de forma rápida y segura las 24 horas.">
+    <meta name="keywords" content="consultorio odontológico, turnos online, Roxana López, citas dentales, salud bucal">
+    <meta name="author" content="Consultorio Roxana López">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://localhost:8080">
+    <meta property="og:title" content="Consultorio Roxana López - Sistema de Turnos">
+    <meta property="og:description" content="Sistema moderno de turnos online. Reservá tu cita dental de forma rápida y segura.">
+    <meta property="og:image" content="images/nuevo logo.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="http://localhost:8080">
+    <meta property="twitter:title" content="Consultorio Roxana López - Sistema de Turnos">
+    <meta property="twitter:description" content="Sistema moderno de turnos online. Reservá tu cita dental de forma rápida y segura.">
+    <meta property="twitter:image" content="images/nuevo logo.png">
+    
+    <!-- Fuentes modernas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Estilos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/calendar.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navbar moderna -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#" id="navBrand">
+                <img src="images/nuevo logo.png" alt="Consultorio Roxana López" height="60" class="me-3">
+                <span>Consultorio Roxana López</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="navHome">Inicio</a>
+                    </li>
+                    <li class="nav-item d-none" id="navMyAppointments">
+                        <a class="nav-link" href="#">Mis Turnos</a>
+                    </li>
+                    <li class="nav-item d-none" id="navNewAppointment">
+                        <a class="nav-link" href="#">Nuevo Turno</a>
+                    </li>
+                    <li class="nav-item d-none" id="navAdmin">
+                        <a class="nav-link" href="#">Admin</a>
+                    </li>
+                    <li class="nav-item" id="navLogin">
+                        <a class="nav-link" href="#">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item" id="navRegister">
+                        <a class="nav-link" href="#">Registrarse</a>
+                    </li>
+                    <li class="nav-item d-none" id="navProfile">
+                        <a class="nav-link" href="#" id="userGreeting"></a>
+                    </li>
+                    <li class="nav-item d-none" id="navLogout">
+                        <a class="nav-link" href="#" style="cursor: pointer;">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="fullscreen-hero">
+        <div id="app">
+            <!-- Home Page -->
+            <div id="homePage" class="content-section">
+                <div class="hero-container">
+                    <div class="row h-100 align-items-center">
+                        <!-- Lado izquierdo - Contenido -->
+                        <div class="col-lg-6">
+                            <div class="hero-content fade-in-up">
+                                <div class="hero-badge mb-4">
+                                    <span class="badge-text">
+                                        <i class="fas fa-tooth me-2"></i>Salud Dental Profesional
+                                    </span>
+                                </div>
+                                <h1 class="hero-title mb-4">
+                                    Consultorio<br>
+                                    <span class="gradient-text">Roxana López</span>
+                                </h1>
+                                <p class="hero-subtitle mb-5">
+                                    Tu salud bucal es nuestra prioridad. Reservá tu turno de forma rápida y segura con nuestro sistema moderno de citas online.
+                                </p>
+                                <div class="cta-buttons">
+                                    <button class="btn btn-primary btn-hero me-3" id="btnGetStarted">
+                                        <i class="fas fa-calendar-plus me-2"></i>Reservar Turno
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-hero" id="btnLogin">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Lado derecho - Features compactas -->
+                        <div class="col-lg-6">
+                            <div class="features-grid">
+                                <div class="feature-card-compact slide-in-right" style="animation-delay: 0.1s;">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h5>Turnos 24/7</h5>
+                                        <p>Reservá cuando quieras</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-card-compact slide-in-right" style="animation-delay: 0.2s;">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-user-md"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h5>Especialistas</h5>
+                                        <p>Profesionales calificados</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-card-compact slide-in-right" style="animation-delay: 0.3s;">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h5>Horarios Flexibles</h5>
+                                        <p>Adaptados a tu agenda</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-card-compact slide-in-right" style="animation-delay: 0.4s;">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h5>App Moderna</h5>
+                                        <p>Fácil y rápida</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-card-compact slide-in-right" style="animation-delay: 0.5s;">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h5>Recordatorios</h5>
+                                        <p>Nunca olvides tu cita</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-card-compact slide-in-right" style="animation-delay: 0.6s;">
+                                    <div class="feature-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h5>Seguro</h5>
+                                        <p>Datos protegidos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Page -->
+            <div id="loginPage" class="content-section d-none">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card shadow">
+                                <div class="card-body p-5">
+                                    <div class="text-center mb-4">
+                                        <img src="images/nuevo logo.png" alt="Consultorio Roxana López" height="60" class="mb-3">
+                                        <h3 class="mt-3">Iniciar Sesión</h3>
+                                    </div>
+                                    <form id="loginForm">
+                                        <div class="mb-3">
+                                            <label for="loginEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="loginEmail" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="loginPassword" class="form-label">Contraseña</label>
+                                            <input type="password" class="form-control" id="loginPassword" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100 mb-3">
+                                            <i class="fas fa-sign-in-alt"></i> Ingresar
+                                        </button>
+                                    </form>
+                                    <div class="text-center">
+                                        <p class="mb-2">
+                                            <a href="forgot-password.html" class="text-decoration-none">
+                                                <i class="fas fa-key me-1"></i>¿Olvidaste tu contraseña?
+                                            </a>
+                                        </p>
+                                        <p class="mb-0">¿No tienes cuenta? 
+                                            <a href="#" id="linkToRegister">Regístrate aquí</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Register Page -->
+            <div id="registerPage" class="content-section d-none">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 col-lg-6">
+                            <div class="card shadow">
+                                <div class="card-body p-5">
+                                    <div class="text-center mb-4">
+                                        <img src="images/nuevo logo.png" alt="Consultorio Roxana López" height="60" class="mb-3">
+                                        <h3 class="mt-3">Crear Cuenta</h3>
+                                    </div>
+                                    <form id="registerForm">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="regFirstName" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="regFirstName" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="regLastName" class="form-label">Apellido</label>
+                                                <input type="text" class="form-control" id="regLastName" required>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="regEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="regEmail" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="regPassword" class="form-label">Contraseña</label>
+                                            <input type="password" class="form-control" id="regPassword" required>
+                                            <small class="form-text text-muted">Mínimo 6 caracteres</small>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="regPhone" class="form-label">Teléfono</label>
+                                                <input type="tel" class="form-control" id="regPhone" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="regDni" class="form-label">DNI</label>
+                                                <input type="text" class="form-control" id="regDni" required>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="regBirthDate" class="form-label">Fecha de Nacimiento</label>
+                                            <input type="date" class="form-control" id="regBirthDate">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100 mb-3">
+                                            <i class="fas fa-user-plus"></i> Registrarse
+                                        </button>
+                                    </form>
+                                    <div class="text-center">
+                                        <p class="mb-0">¿Ya tienes cuenta? 
+                                            <a href="#" id="linkToLogin">Inicia sesión aquí</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Appointment Page -->
+            <div id="appointmentPage" class="content-section d-none">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="card shadow">
+                                <div class="card-header bg-primary text-white">
+                                    <h3 class="mb-0"><i class="fas fa-plus-circle"></i> Nuevo Turno</h3>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form id="appointmentForm">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="appointmentSpecialty" class="form-label">Especialidad</label>
+                                                <select class="form-select" id="appointmentSpecialty" required>
+                                                    <option value="">Selecciona una especialidad</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="appointmentDate" class="form-label">Fecha</label>
+                                                <input type="date" class="form-control" id="appointmentDate" required>
+                                                <div class="form-text" id="dateHelperText">
+                                                    <i class="fas fa-calendar-check text-success"></i> 
+                                                    Puedes reservar desde hoy hasta 30 días adelante. Las fechas no laborables no aparecerán disponibles.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Información de días no laborables próximos -->
+                                        <div id="nonWorkingDaysInfo" class="mb-3 d-none">
+                                            <div class="alert alert-info">
+                                                <h6><i class="fas fa-calendar-times"></i> Próximos días no laborables:</h6>
+                                                <div id="upcomingNonWorkingDays"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Horarios Disponibles</label>
+                                            <div id="availableSlots" class="time-slots-container">
+                                                <p class="text-muted">Selecciona una especialidad y fecha para ver los horarios disponibles</p>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="appointmentNotes" class="form-label">Notas (Opcional)</label>
+                                            <textarea class="form-control" id="appointmentNotes" rows="3" 
+                                                      placeholder="Describe brevemente el motivo de la consulta..."></textarea>
+                                        </div>
+                                        <div class="text-end">
+                                            <button type="button" class="btn btn-secondary me-2" id="btnCancelAppointment">
+                                                <i class="fas fa-times"></i> Cancelar
+                                            </button>
+                                            <button type="submit" class="btn btn-primary" disabled id="btnSubmitAppointment">
+                                                <i class="fas fa-check"></i> Confirmar Turno
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Appointments Page -->
+            <div id="myAppointmentsPage" class="content-section d-none">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow">
+                                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                    <h3 class="mb-0 text-white"><i class="fas fa-calendar text-white"></i> Mis Turnos</h3>
+                                    <button class="btn btn-light btn-sm" id="btnNewAppointmentFromList">
+                                        <i class="fas fa-plus"></i> Nuevo Turno
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div id="appointmentsList">
+                                        <!-- Los turnos se cargarán aquí dinámicamente -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div id="adminPage" class="content-section d-none">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2><i class="fas fa-tachometer-alt"></i> Panel de Administración</h2>
+                        </div>
+                    </div>
+                    <!-- Admin content will be loaded here -->
+                    <div id="adminContent">
+                        <!-- Dashboard, appointments management, etc. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="d-none">
+        <div class="spinner-overlay">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastMessage" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="fas fa-info-circle me-2 text-primary"></i>
+                <strong class="me-auto">Consultorio</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                <!-- Message content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Manejo de errores de carga de scripts -->
+    <script src="js/error-handler.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/appointments.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Script para efectos modernos -->
+    <script>
+        // Efecto navbar al hacer scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Animaciones de entrada
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observar elementos para animación
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.fade-in-up, .slide-in-right');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

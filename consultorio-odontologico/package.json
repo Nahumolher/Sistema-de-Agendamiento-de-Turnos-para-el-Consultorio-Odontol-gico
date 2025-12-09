@@ -1,0 +1,46 @@
+{
+  "name": "consultorio-odontologico-roxana-lopez",
+  "version": "2.0.0",
+  "description": "Sistema completo de gestión de turnos para consultorio odontológico con recordatorios automáticos y panel administrativo",
+  "main": "backend/src/server.js",
+  "scripts": {
+    "start": "cd backend && node src/server.js",
+    "dev": "cd backend && nodemon src/server.js",
+    "install-backend": "cd backend && npm install",
+    "install-all": "npm run install-backend",
+    "setup": "npm run install-all && echo '🔧 Configura tu archivo .env en /backend/ antes de continuar'",
+    "create-admin": "cd backend && node ../scripts/create-admin.js",
+    "test-email": "cd backend && node -e \"require('./src/services/emailService').sendTestEmail()\"",
+    "backup-db": "mysqldump consultorio_odontologico > backup-$(date +%Y%m%d).sql",
+    "clean": "cd backend && rm -rf node_modules package-lock.json && npm install"
+  },
+  "keywords": [
+    "consultorio",
+    "odontologia",
+    "turnos",
+    "citas",
+    "nodejs",
+    "mysql",
+    "email",
+    "recordatorios",
+    "calendario",
+    "sistema-medico"
+  ],
+  "author": "Consultorio Roxana López",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/consultorio-odontologico.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tu-usuario/consultorio-odontologico/issues"
+  },
+  "homepage": "https://github.com/tu-usuario/consultorio-odontologico#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "mysql": ">=8.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}
